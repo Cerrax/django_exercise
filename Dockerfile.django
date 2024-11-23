@@ -1,0 +1,31 @@
+#---------- STAGE FOR ALL BUILDS ----------
+FROM amazonlinux:2023 AS common-base
+
+ENV POETRY_HOME=/usr/lib/pypoetry \
+	POETRY_VIRTUALENVS_CREATE=false
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+ENV PATH=${POETRY_HOME}/bin:${PATH}
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY . /app/
+
+RUN poetry install
+
+
+#---------- STAGE FOR DEPLOYMENT ----------
+FROM common-base AS deploy
+
+ENV DJANGO_SETTINGS_MODULE=server.prod_settings
+
+
+
+#---------- STAGE FOR DEVELOPMENT ----------
+FROM common-base AS development
+
+ENV DJANGO_SETTINGS_MODULE=server.local_settings
+
+ENTRYPOINT ["poetry", "run", "./default.entrypoint.sh"]

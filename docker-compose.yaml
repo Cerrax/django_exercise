@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: arva-postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: django-main-db
+    ports:
+      - "5432:5432"
+  django:
+    container_name: arva-django
+    build:
+      context: ./django
+      dockerfile: ../Dockerfile.django
+      target: development
+    volumes:
+      - ./django:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+  vue:
+    container_name: arva-vue
+    build:
+      context: ./vue
+      dockerfile: ../Dockerfile.vue
+      target: development
+    volumes:
+      - ./vue:/app
+    ports:
+      - "5173:5173"
+      - "8001:8000"
+    depends_on:
+      - django
