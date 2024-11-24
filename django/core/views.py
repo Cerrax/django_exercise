@@ -1,4 +1,4 @@
-
+import json
 import logging
 
 from django.views import View
@@ -8,6 +8,8 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 #-== @h1
 # Core Views
@@ -54,7 +56,7 @@ class UnauthenticatedView(View):
 		# and prepares the view for dispatch.
 
 		super().setup(request, *args, *kwargs)
-		self.logger = logging.getLogger('arva.{}'.format(self.__class__.__qualname__))
+		self.logger = logging.getLogger('django.arva.{}'.format(self.__class__.__qualname__))
 		self.user = request.user
 		self.errors = []
 
@@ -212,8 +214,11 @@ class CrudMixin:
 
 
 ##########################################
-#-== @class
+@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(UnauthenticatedView):
+
+	def get(self, request, *args, **kwargs):
+		return HttpResponse()
 
 	# ----------------------------------------------------
 	#-== @method
@@ -221,19 +226,20 @@ class LoginView(UnauthenticatedView):
 	#-== Authenticates and logs in the user.
 
 	def post(self, request, *args, **kwargs):
-		username = request.POST['username']
-		password = request.POST['password']
+		data = json.loads(request.body)
+		username = data['username']
+		password = data['password']
 		user = authenticate(username=username, password=password)
 		if user:
 			if user.is_active:
 				login(request, user)
-				return 
+				return HttpResponse('logged in')
 			else:
 				self.log_error("Disabled user attempted to log in: '{0}'".format(username))
 		else:
 			self.log_error("Invalid login details for username '{0}'".format(username))
-
-		return HttpResponse()
+		self.logger.info('Logged in')
+		return HttpResponse('Unauthorized', status=401)
 
 
 
