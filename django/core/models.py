@@ -8,7 +8,6 @@ from django.db import models
 #________________________________________
 
 
-##########################################
 #-== @class
 class CoreModel(models.Model):
 	#-== Abstract base model which tracks
@@ -24,6 +23,7 @@ class CoreModel(models.Model):
 
 	class Meta:
 		abstract = True
+
 
 
 class ConcurrentModel(models.Model):

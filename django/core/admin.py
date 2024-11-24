@@ -7,7 +7,7 @@ def autoregister(app_name):  # pragma: no cover
     for model in app_config.models.values():
         try:
             admin.site.register(model)
-        except AlreadyRegistered:
+        except admin.sites.AlreadyRegistered:
             pass
 
 
