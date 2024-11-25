@@ -23,7 +23,6 @@ class UnauthenticatedView(View):
 	# See the Django /View documentation for more info:
 	#						!https://docs.djangoproject.com/en/4.2/topics/class-based-views/
 
-	# ----------------------------------------------------
 	#-== @method
 	def log_error(self, error_msg, exception=None):
 		# -== Handles settings error messages for both
@@ -49,7 +48,6 @@ class UnauthenticatedView(View):
 			self.errors.append(error_msg)
 
 
-	# ----------------------------------------------------
 	#-== @method
 	def setup(self, request, *args, **kwargs):
 		#-== Defines the context for the template render
@@ -60,7 +58,6 @@ class UnauthenticatedView(View):
 		self.user = request.user
 		self.errors = []
 
-	# ----------------------------------------------------
 	#-== @method
 	def check_perms(self, request, *args, **kwargs):
 		#-== Check permissions of the user. As this is
@@ -68,7 +65,6 @@ class UnauthenticatedView(View):
 
 		pass
 
-	# ----------------------------------------------------
 	#-== @method
 	def initialize(self, request, *args, **kwargs):
 		#-== Do any prep work before the view is dispatched.
@@ -76,7 +72,6 @@ class UnauthenticatedView(View):
 
 		pass
 
-	# ----------------------------------------------------
 	#-== @method
 	def dispatch(self, request, *args, **kwargs):
 		#-== Dispatches the view with the appropriate HTTP method
@@ -92,27 +87,21 @@ class UnauthenticatedView(View):
 	# Any methods which are not included will
 	# respond with an HTTP error 405 (Method Not Allowed).
 
-	# ----------------------------------------------------
 	# def get(self, request, *args, **kwargs):
 	# 	pass
 
-	# ----------------------------------------------------
 	# def post(self, request, *args, **kwargs):
 	#	pass
 
-	# ----------------------------------------------------
 	# def put(self, request, *args, **kwargs):
 	# 	pass
 
-	# ----------------------------------------------------
 	# def patch(self, request, *args, **kwargs):
 	# 	pass
 
-	# ----------------------------------------------------
 	# def delete(self, request, *args, **kwargs):
 	# 	pass
 
-	# ----------------------------------------------------
 	# def options(self, request, *args, **kwargs):
 	# 	pass
 
@@ -227,6 +216,7 @@ class LoginView(UnauthenticatedView):
 
 	def post(self, request, *args, **kwargs):
 		data = json.loads(request.body)
+		self.logger.info(data)
 		username = data['username']
 		password = data['password']
 		user = authenticate(username=username, password=password)
@@ -235,10 +225,9 @@ class LoginView(UnauthenticatedView):
 				login(request, user)
 				return HttpResponse('logged in')
 			else:
-				self.log_error("Disabled user attempted to log in: '{0}'".format(username))
+				self.log_error("Disabled user attempted to log in: '{}'".format(username))
 		else:
-			self.log_error("Invalid login details for username '{0}'".format(username))
-		self.logger.info('Logged in')
+			self.log_error("Invalid login details for username '{}'".format(username))
 		return HttpResponse('Unauthorized', status=401)
 
 

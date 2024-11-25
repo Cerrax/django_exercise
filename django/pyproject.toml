@@ -10,8 +10,8 @@ package-mode = false
 python = "^3.9"
 Django = "*"
 django-concurrency = "*"
+django-cors-headers = "*"
 psycopg = { version = "*", extras = ["binary"] }
-
 
 [build-system]
 requires = ["poetry-core"]
