@@ -21,6 +21,10 @@ const defaultColDef = ref({
   flex: 1,
 })
 
+function goToImport() {
+  router.push({ name: 'import' })
+}
+
 // Column Definitions: Defines the columns to be displayed.
 const colDefs = ref([
   { field: "farm__grower__name", headerName: "Grower" },
@@ -56,7 +60,12 @@ function rowClicked(event) {
 </script>
 <template>
   <div class="manage">
-    <button @click="logout()">Log Out</button>
+    <div class="actionButtonBar">
+      <button @click="goToImport()">Import Records</button>
+      <button>Add New Field</button>
+      <div class="spacer"></div>
+      <button @click="logout()">Log Out</button>
+    </div>
     <h1>Manage Fields</h1>
     <ag-grid-vue
       ref="agGrid"
@@ -73,4 +82,8 @@ function rowClicked(event) {
 </template>
 
 <style scoped>
+.spacer {
+  display: inline-block;
+  width: 10vw;
+}
 </style>

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ManageFields from '@/views/ManageFields.vue'
 import EditFieldRecord from '@/views/EditFieldRecord.vue'
+import ImportRecords from '@/views/ImportRecords.vue'
 
 // Login
 // ManageFields
@@ -22,7 +23,12 @@ const router = createRouter({
       path: '/fields/:id',
       name: 'edit',
       component: EditFieldRecord,
-    }
+    },
+    {
+      path: '/fields/import',
+      name: 'import',
+      component: ImportRecords,
+    },
   ],
 })
 
