@@ -244,4 +244,4 @@ class LogoutView(BaseView):
 
 	def get(self, request, *args, **kwargs):
 		logout(request)
-		return HttpResponse()
+		return HttpResponse('logged out')

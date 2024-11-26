@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 
-defineProps({
+const props = defineProps({
   id: {
     type: String,
     required: true,
@@ -18,19 +18,25 @@ defineProps({
     type: String,
     required: false,
   },
+  disabled: {
+    type: Boolean,
+    default: false
+  }
 })
 
-const value = ref("")
+const value = defineModel()
+const isDisabled = ref(props.disabled)
 
 defineExpose({
   value,
+  isDisabled,
 })
 </script>
 
 <template>
   <div class="input-field">
-    <label v-if="label" :for="id" >{{ label }}</label>
-    <input :type="type" :id="id" :name="name" v-model="value" />
+    <label v-if="label" :for="id" >{{ label }}: </label>
+    <input :type="type" :id="id" :name="name" v-model="value" :disabled="isDisabled"/>
   </div>
 </template>
 

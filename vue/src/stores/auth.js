@@ -6,7 +6,7 @@ export const useAuthStore = defineStore('auth', () => {
   const username = ref("")
   const loginError = ref("")
   const authenticated = ref(false)
-  const authHeaders = ref({})
+  const authHeaders = ref({ withCredentials: true })
 
   async function login(username, password) {
     let data = { 
@@ -17,19 +17,25 @@ export const useAuthStore = defineStore('auth', () => {
     .then(response => {
       this.username = username
       this.authenticated = true
-      let cookieValue = null;
+      let cookieValue = null
+      let csrfToken = null;
       if (document.cookie && document.cookie !== '') {
-          const cookies = document.cookie.split(';');
-          for (let i = 0; i < cookies.length; i++) {
-              const cookie = cookies[i].trim();
-              // Does this cookie string begin with the name we want?
-              if (cookie.substring(0, 10) === ('csrftoken=')) {
-                  cookieValue = decodeURIComponent(cookie.substring(10));
-                  break;
-              }
+        cookieValue = document.cookie
+        const cookies = document.cookie.split(';')
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim()
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, 10) === ('csrftoken=')) {
+            csrfToken = decodeURIComponent(cookie.substring(10));
+            break;
           }
+        }
       }
-      this.authHeaders = { headers: { 'X-CSRFToken': cookieValue }}
+      this.authHeaders = {
+        headers: {
+          'X-CSRFToken': csrfToken,
+        },
+      }
       this.loginError=""
     })
     .catch(error => {
@@ -42,7 +48,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function logout() {
-    await axios.get('core/logout/')
+    await axios.get('core/logout/', this.authHeaders)
     this.username = ""
     this.authenticated = false
     this.authHeaders = {}

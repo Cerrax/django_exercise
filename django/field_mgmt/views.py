@@ -6,9 +6,22 @@ from core.views import BaseView, CrudMixin
 from field_mgmt.models import Grower, Farm, Field
 
 
+class FarmList(BaseView, CrudMixin):
+
+	def get(self, request, *args, **kwargs):
+		qs = Farm.objects.all()
+		qs = qs.select_related('grower')
+		results = []
+		for obj in qs:
+			data = obj.to_data(depth=2)
+			results.append(data)
+		datastr = json.dumps(results)
+		return HttpResponse(datastr)
+
+
 class Index(BaseView, CrudMixin):
 
-	RECORD_FIELDS = ['name', 'area', 'farm__name',
+	RECORD_FIELDS = ['pk', 'name', 'area', 'farm__name',
 		   'farm__grower__name', 'farm__grower__street_addr',
 		   'farm__grower__city', 'farm__grower__state',
 		   'farm__grower__zip_code', 'farm__grower__country']

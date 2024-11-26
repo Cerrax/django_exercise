@@ -1,5 +1,3 @@
-import '@/assets/main.css'
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import axios from 'axios'
@@ -18,6 +16,7 @@ app.config.globalProperties.$auth = useAuthStore() // Make the store globally ac
 app.use(router)
 
 app.use(VueAxios, axios)
+axios.defaults.withCredentials = true
 axios.defaults.baseURL = 'http://localhost:8000/'
 
 app.mount('#app')
