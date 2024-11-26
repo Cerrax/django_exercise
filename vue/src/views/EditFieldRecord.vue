@@ -22,7 +22,7 @@ const fieldRecord = ref({
   version: null,
   name: "",
   area: 0.0,
-  farm: null,
+  farm: {pk: null},
 })
 
 let getFarms = axios.get('manage/farms/', proxy.$auth.authHeaders)
@@ -33,10 +33,15 @@ let getFarms = axios.get('manage/farms/', proxy.$auth.authHeaders)
     console.log(error)
   })
 
-let getFieldRecord = axios.get(`manage/fields/${route.params.id}/`, proxy.$auth.authHeaders)
-  .then(response => {
-    fieldRecord.value = response.data
-  })
+if (!props.createMode) {
+  let getFieldRecord = axios.get(`manage/fields/${route.params.id}/`, proxy.$auth.authHeaders)
+    .then(response => {
+      fieldRecord.value = response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
 
 async function submitRecord() {
   let data = {

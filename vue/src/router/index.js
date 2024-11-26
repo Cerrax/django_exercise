@@ -17,7 +17,13 @@ const router = createRouter({
       alias: '/',
       path: '/fields',
       name: 'manage',
-      component: ManageFields
+      component: ManageFields,
+    },
+    {
+      path: '/fields/create',
+      name: 'create',
+      component: EditFieldRecord,
+      props: { createMode: true },
     },
     {
       path: '/fields/:id',

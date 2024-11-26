@@ -25,6 +25,10 @@ function goToImport() {
   router.push({ name: 'import' })
 }
 
+function goToCreate() {
+  router.push({ name: 'create' })
+}
+
 // Column Definitions: Defines the columns to be displayed.
 const colDefs = ref([
   { field: "farm__grower__name", headerName: "Grower" },
@@ -62,7 +66,7 @@ function rowClicked(event) {
   <div class="manage">
     <div class="actionButtonBar">
       <button @click="goToImport()">Import Records</button>
-      <button>Add New Field</button>
+      <button @click="goToCreate()">Add New Field</button>
       <div class="spacer"></div>
       <button @click="logout()">Log Out</button>
     </div>

@@ -37,6 +37,8 @@ class Index(BaseView, CrudMixin):
 	def post(self, request, *args, **kwargs):
 		# create a new field record
 		data = json.loads(request.body)
+		del data['pk']
+		del data['version']
 		newobj = Field(**data)
 		newobj.save()
 		objdata = newobj.to_data(depth=2)
