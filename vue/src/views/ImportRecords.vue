@@ -41,6 +41,7 @@ function cancel() {
   <div class="import">
     <h1>Import Data</h1>
     <div>
+      <label for="importFile">CSV File:</label>
       <input type="file"
         id="importFile" name="importFile"
         accept=".csv"

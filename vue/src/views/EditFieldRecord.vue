@@ -87,6 +87,8 @@ function cancel() {
 
 <template>
     <div class="edit">
+        <h1 v-if="props.createMode">New Field Record</h1>
+        <h1 v-else>Edit Field Record</h1>
         <!-- <SelectField id="grower" name="grower" label="Grower" :items="growerList" ref="selectGrower" /> -->
         <SelectField id="farm" name="farm" label="Farm" :items="farmList" ref="selectFarm" v-model="fieldRecord.farm.pk" />
         <InputField type="text" id="name" name="name" label="Field Name" ref="inputFieldName" v-model="fieldRecord.name" />

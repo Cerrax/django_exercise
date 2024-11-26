@@ -1,0 +1,33 @@
+:root {
+	--arva-green: #7ac61d;
+	--disabled-button: #888;
+	--disabled-button-text: #ccc;
+
+	--widget-padding: 10px;
+	--widget-margin: 5px;
+}
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.spacer {
+	width: 10vw;
+}
+
+button {
+	color: white;
+	background-color: var(--arva-green);
+	border: 0;
+	border-radius: 5px;
+}
+
+button[disabled] {
+	color:var(--disabled-button-text);
+	background-color: var(--disabled-button);
+}
+
+input, button, label, select {
+	padding: var(--widget-padding);
+	margin: var(--widget-margin);
+}

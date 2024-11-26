@@ -14,7 +14,7 @@ function attemptLogin() {
 
 <template>
   <div class="login">
-    <h1 class="">Login</h1>
+    <h1 class="centeredFlex"><img id="splashLogo" src="@/assets/logo_w_name.png"/>Login</h1>
     <InputField type="text" id="username" name="username" label="Username" ref="inputUser" />
     <InputField type="password" id="password" name="password" label="Password" ref="inputPass" />
     <button @click="attemptLogin()">Submit</button>
@@ -22,4 +22,12 @@ function attemptLogin() {
 </template>
 
 <style scoped>
+#splashLogo {
+  height: 4rem;
+}
+
+.centeredFlex {
+  display:flex;
+  align-items: center;
+}
 </style>
