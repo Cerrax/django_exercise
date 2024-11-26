@@ -2,6 +2,8 @@
 	--arva-green: #7ac61d;
 	--disabled-button: #888;
 	--disabled-button-text: #ccc;
+	--error-box: #fdc4c4;
+	--error-box-border: red;
 
 	--widget-padding: 10px;
 	--widget-margin: 5px;
@@ -30,4 +32,17 @@ button[disabled] {
 input, button, label, select {
 	padding: var(--widget-padding);
 	margin: var(--widget-margin);
+}
+
+.errorBox {
+	display: inline-block;
+	margin: 5px;
+    padding: 5px;
+    font-size: .85rem;
+	font-style: italic;
+    line-height: 1.5;
+	background-color: var(--error-box);
+	border: 2px solid;
+	border-radius: 5px;
+	border-color: var(--error-box-border);
 }

@@ -16,6 +16,7 @@ const props = defineProps({
 })
 
 const { proxy } = getCurrentInstance()
+const errors = ref([])
 const farmList = ref([])
 const fieldRecord = ref({
   pk: null,
@@ -31,6 +32,7 @@ let getFarms = axios.get('manage/farms/', proxy.$auth.authHeaders)
   })
   .catch(error => {
     console.log(error)
+    errors.value = ["Unable to retrieve the list of farms."]
   })
 
 if (!props.createMode) {
@@ -40,6 +42,7 @@ if (!props.createMode) {
     })
     .catch(error => {
       console.log(error)
+      errors.value = ["Unable to retrieve field record."]
     })
 }
 
@@ -57,6 +60,7 @@ async function submitRecord() {
           router.push({name: 'manage'})
       })
       .catch(error => {
+          errors.value = error.response.data
           console.log(error)
       })
   } else {
@@ -65,6 +69,7 @@ async function submitRecord() {
           router.push({name: 'manage'})
       })
       .catch(error => {
+          errors.value = error.response.data
           console.log(error)
       })
   }
@@ -89,6 +94,11 @@ function cancel() {
     <div class="edit">
         <h1 v-if="props.createMode">New Field Record</h1>
         <h1 v-else>Edit Field Record</h1>
+        <div v-if="errors.length > 0">
+            <div class="errorBox">
+            <div v-for="(err, index) in errors" :key="'err' + index">{{ err }}</div>
+          </div>
+        </div>
         <!-- <SelectField id="grower" name="grower" label="Grower" :items="growerList" ref="selectGrower" /> -->
         <SelectField id="farm" name="farm" label="Farm" :items="farmList" ref="selectFarm" v-model="fieldRecord.farm.pk" />
         <InputField type="text" id="name" name="name" label="Field Name" ref="inputFieldName" v-model="fieldRecord.name" />

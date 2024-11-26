@@ -40,6 +40,9 @@ class Index(BaseView, CrudMixin):
 		del data['pk']
 		del data['version']
 		newobj = Field(**data)
+		self.validate_model_obj(newobj)
+		if self.errors:
+			return self.http_error(status_code=400)
 		newobj.save()
 		objdata = newobj.to_data(depth=2)
 		datastr = json.dumps(objdata)
@@ -47,7 +50,7 @@ class Index(BaseView, CrudMixin):
 
 
 
-class FieldRecord(BaseView):
+class FieldRecord(BaseView, CrudMixin):
 
 	#----------------------------------------------------
 	def get(self, request, pk, *args, **kwargs):
@@ -64,6 +67,9 @@ class FieldRecord(BaseView):
 		data = json.loads(request.body)
 		data['pk'] = pk
 		newobj = Field(**data)
+		self.validate_model_obj(newobj)
+		if self.errors:
+			return self.http_error(status_code=400)
 		newobj.save()
 		objdata = newobj.to_data(depth=2)
 		datastr = json.dumps(objdata)
@@ -76,6 +82,9 @@ class FieldRecord(BaseView):
 		data = json.loads(request.body)
 		for key, val in data.items():
 			setattr(obj, key, val)
+		self.validate_model_obj(obj)
+		if self.errors:
+			return self.http_error(status_code=400)
 		obj.save()
 		objdata = obj.to_data(depth=2)
 		datastr = json.dumps(objdata)
@@ -92,7 +101,7 @@ class FieldRecord(BaseView):
 
 
 
-class ImportData(BaseView):
+class ImportData(BaseView, CrudMixin):
 
 	def set_value(self, obj, row, field_name):
 		if field_name in row.keys():
@@ -110,7 +119,10 @@ class ImportData(BaseView):
 			self.set_value(grower, row, 'state')
 			self.set_value(grower, row, 'zip_code')
 			self.set_value(grower, row, 'country')
-			grower.save()
+			if self.validate_model_obj(grower):
+				grower.save()
+			else:
+				grower = None
 		elif len(existing_growers) > 1:
 			self.log_error('Multiple growers with name: {}'.format(grower_name))
 		elif len(existing_growers) == 1:
@@ -124,7 +136,10 @@ class ImportData(BaseView):
 		if len(existing_farms) == 0:
 			self.logger.info('No farm with name, creating new farm: {}'.format(farm_name))
 			farm = Farm(name=farm_name, grower=grower)
-			farm.save()
+			if self.validate_model_obj(farm):
+				farm.save()
+			else:
+				farm = None
 		elif len(existing_farms) > 1:
 			self.log_error('Multiple farms with name: {}'.format(farm_name))
 		elif len(existing_farms) == 1:
@@ -139,36 +154,62 @@ class ImportData(BaseView):
 			self.logger.warning('No field with name, creating new field: {}'.format(field_name))
 			area = row['area']
 			field = Field(name=field_name, area=area, farm=farm)
-			field.save()
+			if self.validate_model_obj(field):
+				field.save()
+			else:
+				field = None
 		elif len(existing_fields) > 1:
 			self.log_error('Multiple field with name: {}'.format(field_name))
 		elif len(existing_fields) == 1:
 			field = existing_fields[0]
+			field.area = row['area']
+			if self.validate_model_obj(field):
+				field.save()
+			else:
+				field = None
 		return field
+	
+	def check_required_columns(self, columns):
+		passed = True
+		if 'grower_name' not in columns:
+			passed = False
+			self.log_error('No "grower_name" column defined')
+		if 'farm_name' not in columns:
+			self.log_error('No "farm_name" column defined')
+			passed = False
+		if 'field_name' not in columns:
+			self.log_error('No "field_name" column defined')
+			passed = False
+		if 'area' not in columns:
+			self.log_error('No area column defined')
+			passed = False
+		return passed
 	
 	def post(self, request, *args, **kwargs):
 		# import CSV data as new field records
 		records_read = 0
 		records_processed = 0
+		columnsValid = None
 		success = True
 		importdata = request.body.decode('utf-8')
 		reader = csv.DictReader(importdata.splitlines())
-		for row in reader:
-			records_read += 1
+		if self.check_required_columns(reader.fieldnames):
+			for row in reader:
+				records_read += 1
+				grower = self.get_grower(row)
+				if grower is None:
+					self.logger.info('GROWER IS NONE')
+					continue
 
-			grower = self.get_grower(row)
-			if grower is None:
-				continue
+				farm = self.get_farm(row, grower)
+				if farm is None:
+					continue
 
-			farm = self.get_farm(row, grower)
-			if farm is None:
-				continue
+				field = self.get_field(row, farm)
+				if field is not None:
+					records_processed += 1
 
-			field = self.get_field(row, farm)
-			if field is not None:
-				records_processed += 1
-
-		if records_read > records_processed:
+		if self.errors:
 			success = False
 		data = {
 			'records_read': records_read,

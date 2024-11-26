@@ -31,7 +31,7 @@ function goToCreate() {
 
 // Column Definitions: Defines the columns to be displayed.
 const colDefs = ref([
-  { field: "farm__grower__name", headerName: "Grower" },
+  { field: "farm__grower__name", headerName: "Grower", sort: "asc" },
   { field: "farm__grower__street_addr", headerName: "Street Address" },
   { field: "farm__grower__city", headerName: "City" },
   { field: "farm__grower__state", headerName: "State" },
@@ -66,7 +66,7 @@ function rowClicked(event) {
   <div class="manage">
     <div class="actionButtonBar">
       <button @click="goToImport()">Import Records</button>
-      <button @click="goToCreate()">Add New Field</button>
+      <button @click="goToCreate()">Add New Record</button>
       <div class="spacer"></div>
       <button @click="logout()">Log Out</button>
     </div>

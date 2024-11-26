@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export const useAuthStore = defineStore('auth', () => {
   const username = ref("")
-  const loginError = ref("")
+  const loginErrors = ref([])
   const authenticated = ref(false)
   const authHeaders = ref({ withCredentials: true })
 
@@ -36,14 +36,14 @@ export const useAuthStore = defineStore('auth', () => {
           'X-CSRFToken': csrfToken,
         },
       }
-      this.loginError=""
+      this.loginErrors = []
     })
     .catch(error => {
       this.username = ""
       this.authenticated = false
       this.authHeaders = {}
       console.log(error)
-      this.loginError="Username and password did not match valid user."
+      this.loginErrors = error.response.data
     })
   }
 
@@ -52,7 +52,7 @@ export const useAuthStore = defineStore('auth', () => {
     this.username = ""
     this.authenticated = false
     this.authHeaders = {}
-    this.loginError=""
+    this.loginErrors = []
   }
 
   return { username, authenticated, authHeaders, login, logout }

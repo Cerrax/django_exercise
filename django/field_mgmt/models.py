@@ -1,5 +1,6 @@
 
 from django.db import models
+from django.core.validators import MinValueValidator
 
 from core.models import CoreModel, ConcurrentModel
 
@@ -12,6 +13,9 @@ class Grower(CoreModel, ConcurrentModel):
 	state = models.CharField(max_length=100, null=True, blank=True)
 	zip_code = models.CharField(max_length=100, null=True, blank=True)
 	country = models.CharField(max_length=100, null=True, blank=True)
+
+	def __str__(self):
+		return self.name
 
 	def to_data(self, depth=0):
 		data = {
@@ -33,6 +37,9 @@ class Farm(CoreModel, ConcurrentModel):
 	name = models.CharField(max_length=100, null=False, blank=False)
 	grower = models.ForeignKey(Grower, on_delete=models.CASCADE , null=False)
 
+	def __str__(self):
+		return self.name
+
 	def to_data(self, depth=0):
 		data = {
 			'pk': self.pk,
@@ -50,8 +57,11 @@ class Farm(CoreModel, ConcurrentModel):
 class Field(CoreModel, ConcurrentModel):
 
 	name = models.CharField(max_length=100, null=False, blank=False)
-	area = models.FloatField(null=True)
+	area = models.FloatField(null=False, validators=[MinValueValidator(0.0001, message='Area must be at least 0.0001 acres.')])
 	farm = models.ForeignKey(Farm, on_delete=models.CASCADE , null=False)
+
+	def __str__(self):
+		return '{} - {}'.format(self.farm.name, self.name)
 
 	def to_data(self, depth=0):
 		data = {

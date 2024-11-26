@@ -47,6 +47,13 @@ class UnauthenticatedView(View):
 		else:
 			self.errors.append(error_msg)
 
+	#-== @method
+	def http_error(self, status_code=500):
+		#-== Convenience method that sends an HTTP response with a specific error code
+		# and includes the list of errors logged on the request.
+
+		error_str = json.dumps(self.errors)
+		return HttpResponse(error_str, status=status_code)
 
 	#-== @method
 	def setup(self, request, *args, **kwargs):
@@ -137,7 +144,7 @@ class CrudMixin:
 
 	# ----------------------------------------------------
 	#-== @method
-	def serailize(self, obj, format='py', feilds=None):
+	def serialize(self, obj, format='py', fields=None):
 		#-== Serializes an /obj into the provided /format with the indicated /fields .
 		# @params
 		# obj: the Django model object to serialize
@@ -186,19 +193,28 @@ class CrudMixin:
 		#-== Convenience method that will instantiate
 		# the /data into the /modelclass and then validate it.
 
-		obj = self.deserialize(data, PYTHON, modelclass)
-		validate_model_obj(obj)
+		obj = self.deserialize(data, self.PYTHON, modelclass)
+		self.validate_model_obj(obj)
 
 	# ----------------------------------------------------
 	#-== @method
 	def validate_model_obj(self, obj):
 		#-== Convenience method that runs the /obj.full_clean() validation
 		# and logs any errors to both the logs and the HTML template context.
-
 		try:
 			obj.full_clean()
+			return True
 		except ValidationError as exc:
-			self.log_error(exc.message, exception=exc)
+			self.logger.exception('Model validation failed')
+			if hasattr(exc, 'error_list'):
+				self.errors.extend(exc.error_list)
+			if hasattr(exc, 'error_dict'):
+				for key, val in exc.error_dict.items():
+					err_str = key + ':'
+					for error in val:
+						err_str += ' '+ error.message
+					self.errors.append(err_str)
+		return False
 
 
 
@@ -227,8 +243,9 @@ class LoginView(UnauthenticatedView):
 			else:
 				self.log_error("Disabled user attempted to log in: '{}'".format(username))
 		else:
-			self.log_error("Invalid login details for username '{}'".format(username))
-		return HttpResponse('Unauthorized', status=401)
+			self.log_error("Invalid credentials for username '{}'".format(username))
+		
+		return self.http_error(status_code=401)
 
 
 
