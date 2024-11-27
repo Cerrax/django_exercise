@@ -1,3 +1,22 @@
+<!--
+-== @class
+SelectField.vue
+-== Component for /<select> HTML tags.
+
+-== **Props:**
+@deflist
+id: HTML /id attribute of the /<select>
+name: HTML /name attribute of the /<select>
+label: the string to display within the /<label> of the /<select>
+disabled: a boolean which can disable the /<select> when true
+v-model: the data which is used in the /value of the /<select>
+
+-== @note
+The /v-model expects the data to be a list of objects,
+each with a /pk field which it can use to identify the objects.
+
+-->
+
 <script setup>
 import { ref } from 'vue'
 

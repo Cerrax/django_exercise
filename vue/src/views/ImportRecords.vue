@@ -1,3 +1,10 @@
+<!--
+-== @class
+ImportRecords.vue
+-== Page which allows a user to import CSV data into the application.
+
+-->
+
 <script setup>
 import { getCurrentInstance, useTemplateRef, ref } from 'vue'
 import axios from 'axios'

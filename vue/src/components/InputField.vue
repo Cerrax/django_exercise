@@ -1,3 +1,19 @@
+<!--
+-== @class
+InputField.vue
+-== Component for /<input> HTML tags.
+
+-== **Props:**
+@deflist
+id: HTML /id attribute of the /<input>
+name: HTML /name attribute of the /<input>
+type: HTML /type attribute of the /<input>
+label: the string to display within the /<label> of the /<input>
+disabled: a boolean which can disable the /<input> when true
+v-model: the data which is used in the /value of the /<input>
+
+-->
+
 <script setup>
 import { ref } from 'vue'
 

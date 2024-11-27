@@ -113,7 +113,6 @@ class UnauthenticatedView(View):
 	# 	pass
 
 
-##########################################
 #-== @class
 class BaseView(LoginRequiredMixin, UnauthenticatedView):
 	#-== Adds login requirement and permission checks to basic page.
@@ -131,7 +130,6 @@ class BaseView(LoginRequiredMixin, UnauthenticatedView):
 		pass
 
 
-##########################################
 #-== @class
 class CrudMixin:
 	#-== A View-class mixin which provides methods
@@ -142,7 +140,6 @@ class CrudMixin:
 	XML = 'xml'
 	modelclass = None
 
-	# ----------------------------------------------------
 	#-== @method
 	def serialize(self, obj, format='py', fields=None):
 		#-== Serializes an /obj into the provided /format with the indicated /fields .
@@ -160,7 +157,6 @@ class CrudMixin:
 		else:
 			raise ValueError('Unsupported serialization format: {}'.format(format))
 
-	# ----------------------------------------------------
 	#-== @method
 	def deserialize(self, data, format='py', modelclass=None):
 		#-== Deserializes the /data from the provided /format into the provided /modelclass .
@@ -187,7 +183,6 @@ class CrudMixin:
 		else:
 			raise ValueError('Unsupported deserialization format: {}'.format(format))
 
-	# ----------------------------------------------------
 	#-== @method
 	def validate(self, modelclass, data):
 		#-== Convenience method that will instantiate
@@ -196,11 +191,11 @@ class CrudMixin:
 		obj = self.deserialize(data, self.PYTHON, modelclass)
 		self.validate_model_obj(obj)
 
-	# ----------------------------------------------------
 	#-== @method
 	def validate_model_obj(self, obj):
 		#-== Convenience method that runs the /obj.full_clean() validation
 		# and logs any errors to both the logs and the HTML template context.
+
 		try:
 			obj.full_clean()
 			return True
@@ -217,15 +212,11 @@ class CrudMixin:
 		return False
 
 
-
-##########################################
 @method_decorator(csrf_exempt, name='dispatch')
+#-== @class
 class LoginView(UnauthenticatedView):
+	#-== Logs in a valid, active user.
 
-	def get(self, request, *args, **kwargs):
-		return HttpResponse()
-
-	# ----------------------------------------------------
 	#-== @method
 	# POST
 	#-== Authenticates and logs in the user.
@@ -248,13 +239,10 @@ class LoginView(UnauthenticatedView):
 		return self.http_error(status_code=401)
 
 
-
-##########################################
 #-== @class
 class LogoutView(BaseView):
 	#-== Logs out a user and redirects to login.
 
-	# ----------------------------------------------------
 	#-== @method
 	# GET
 	#-== Logs out a user.

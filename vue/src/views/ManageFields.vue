@@ -1,3 +1,11 @@
+<!--
+-== @class
+ManageFields.vue
+-== Page which has a list of field records,
+as well as navigation to create field records and import from CSV.
+
+-->
+
 <script setup>
 import { getCurrentInstance, useTemplateRef, ref } from 'vue'
 import { useRouter } from 'vue-router'

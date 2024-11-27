@@ -1,14 +1,18 @@
+//-== @h2
+// Router Configuration
+//-== /src/router/index.js
+
+//-== **Available Routes:**
+// @deflist
+// /fields: manage fields page ( /ManageFields.vue )
+// /fields/create: create new field page ( /EditFieldRecord.vue )
+// /fields/id: edit/delete field page ( /EditFieldRecord.vue )
+// /fields/import: import CSV data ( /ImportRecords.vue )
+
 import { createRouter, createWebHistory } from 'vue-router'
 import ManageFields from '@/views/ManageFields.vue'
 import EditFieldRecord from '@/views/EditFieldRecord.vue'
 import ImportRecords from '@/views/ImportRecords.vue'
-
-// Login
-// ManageFields
-// FieldRecord
-// Import Records
-// (optional) Manage Growers
-// (optional) Manage Farms
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

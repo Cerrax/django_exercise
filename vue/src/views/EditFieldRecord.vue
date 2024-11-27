@@ -1,3 +1,16 @@
+<!--
+-== @class
+EditFieldRecord.vue
+-== Page which provides inputs to
+view, create, edit, and delete field records.
+
+-== **Props:**
+@deflist
+createMode: a boolean indicating if the form is for creating a new record,
+            or editing/deleting an existing record
+
+-->
+
 <script setup>
 import InputField from '@/components/InputField.vue'
 import SelectField from '@/components/SelectField.vue'
@@ -107,7 +120,7 @@ function cancel() {
             <button @click="submitRecord()">Submit</button>
             <button @click="cancel()">Cancel</button>
             <div class="spacer"></div>
-            <button @click="deleteRecord()">Delete</button>
+            <button @click="deleteRecord()" v-if="!props.createMode">Delete</button>
         </div>
     </div>
 </template>

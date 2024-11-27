@@ -25,8 +25,22 @@ class CoreModel(models.Model):
 		abstract = True
 
 
-
+#-== @class
 class ConcurrentModel(models.Model):
+    #-== Abstract model which provides optimistic locking.
+	# This allows us to prevent row locking when reading data.
+
+	# -== *Model Fields:*
+	# @deflist
+	# version: an integer which increments each time the database record is modified
+      
+	#-== If the record is submitted to the database and the /version
+	# does not match what is stored in the database, the transaction is rejected.
+    # This allows us to set the database to do writes without locking any rows during a read,
+	# since the only way to update a row is if it has not been changed.
+    #@note
+    # This may require the database to be set up to not lock per-table or per-row during reads.
+
     version = AutoIncVersionField()
 
     class Meta:

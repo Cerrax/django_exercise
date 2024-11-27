@@ -1,3 +1,10 @@
+<!--
+-== @class
+Login.vue
+-== Login page for the web application.
+
+-->
+
 <script setup>
 import InputField from '@/components/InputField.vue'
 import { getCurrentInstance, useTemplateRef, ref } from 'vue'
