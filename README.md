@@ -51,6 +51,17 @@ Once the containers have started you will have access to several ports on your l
 
 Go to the Vue.js URL http://localhost:5173 in your browser to see the webapp running.
 
+To login to the webapp, you need to create a Django **superuser** in the django container:
+```
+docker compose exec django bash
+python3 manage.py createsuperuser
+```
+
+Once the superuser is created, you can access the Django admin console (http://localhost:8000/admin/),
+and login as the superuser to create a user.
+
+You can also log into the webpp with the superuser account itself.
+
 
 ## Set up for local development
 
@@ -97,3 +108,25 @@ npm run dev
 ```
 
 Go to the Vue.js URL http://localhost:5173 in your browser to see the webapp running.
+
+To login to the webapp, you need to create a Django **superuser**:
+```
+python3 manage.py createsuperuser
+```
+
+Once the superuser is created, you can access the Django admin console (http://localhost:8000/admin/),
+and login as the superuser to create a user.
+
+You can also log into the webpp with the superuser account itself.
+
+## Loading data into the system
+
+There is a Google Sheet which provides information and sample data: 
+https://docs.google.com/spreadsheets/d/1MRdKvWF1WWluxKUHb8MpQ6xtPHGZIZfcOE4ndld7ltE/edit?usp=sharing
+
+Make a copy of this sheet and you can edit it to create your own sample data.
+
+You can export the "sample_data" sheets as CSV files and import them into the app.
+1. Once you are logged in, click on the "Import Records" button
+2. Select the CSV file you want to import
+3. Click "Import File"

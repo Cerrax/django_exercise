@@ -1,0 +1,16 @@
+grower_name,street_addr,city,state,zip_code,country,farm_name,field_name,area
+James T. Kirk,,,,,,NCC-1701 Enterprise,Sector 1,120
+James T. Kirk,,,,,,NCC-1701 Enterprise,Sector 2,120
+James T. Kirk,,,,,,NCC-1701-A Enterprise,Sector 1,180
+James T. Kirk,,,,,,NCC-1701-A Enterprise,Sector 2,87
+Picard Foods Inc.,,,,,,NCC-1701-D Enterprise,Bridge,45
+Picard Foods Inc.,,,,,,NCC-1701-E Enterprise,Engineering,190
+Picard Foods Inc.,,,,,,NCC-1701-E Enterprise,Jefferies Tube A19,15.76
+Sisko Industries,,,,,,DS9 Terok Nor,Promenade,100.5
+Sisko Industries,,,,,,DS9 Terok Nor,Quark's Bar,57
+Sisko Industries,,,,,,DS9 Terok Nor,Replimat,34.7
+Sisko Industries,,,,,,NX-74205 Defiant,Battle Bridge,18.7
+Janeway Coffee Co.,,,,,,NCC-74656 Voyager,Ready Room,9.6
+Janeway Coffee Co.,,,,,,NCC-74656 Voyager,Holodeck A,17
+Janeway Coffee Co.,,,,,,NCC-74656 Voyager,Holodeck B,17
+Janeway Coffee Co.,,,,,,NCC-74656 Voyager,Shuttle Bay,290.94
